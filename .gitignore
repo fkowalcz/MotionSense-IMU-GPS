@@ -1,0 +1,47 @@
+# Ignore build directories
+/build/
+/Debug/
+/Release/
+
+# Ignore object files
+*.o
+*.obj
+
+# Ignore binary files
+*.exe
+*.out
+*.bin
+*.hex
+
+# Ignore IDE specific files and folders
+.metadata/
+.settings/
+.launch/
+.metadata
+.settings
+.launch
+*.user
+*.workspace
+*.project
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.log
+
+# Ignore compiler generated files
+*.d
+*.dep
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore the compiled STM32 firmware
+*.bin
+*.hex
+
+# Ignore documentation files
+*.docx
+
+# Ignore any other files
