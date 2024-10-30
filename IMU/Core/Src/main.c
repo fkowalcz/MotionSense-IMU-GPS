@@ -26,8 +26,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "lsm9ds1_lib.h"
+#include "utils.hpp"
 
 #include "stdio.h"
+#include "string.h"
 
 /* USER CODE END Includes */
 
@@ -49,17 +51,13 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t IMU_flag = 0;
-uint8_t check = 0;
-//IMU_t IMU;
+volatile uint8_t IMU_flag = 0;
+uint8_t IMU_status;
+uint8_t MAG_status;
 
+IMU_t IMU;
 
-uint8_t Buffer[25] = {0};
-uint8_t Space[] = " - ";
-uint8_t StartMSG[] = "Starting I2C Scanning: \r\n";
-uint8_t EndMSG[] = "Done! \r\n\r\n";
-
-uint8_t i = 0, ret;
+char IMU_i2cBuffer[150];
 
 /* USER CODE END PV */
 
@@ -71,6 +69,8 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+
 
 /* USER CODE END 0 */
 
@@ -113,35 +113,21 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_Delay(500);
 
-//  /*-[ I2C Bus Scanning ]-*/
-//  HAL_UART_Transmit(&huart2, StartMSG, sizeof(StartMSG), 10000);
-//  for(i=1; i<128; i++)
-//  {
-//      ret = HAL_I2C_IsDeviceReady(&hi2c1, (uint16_t)(i<<1), 3, 5);
-//      if (ret != HAL_OK) /* No ACK Received At That Address */
-//      {
-//          HAL_UART_Transmit(&huart2, Space, sizeof(Space), 10000);
-//      }
-//      else if(ret == HAL_OK)
-//      {
-//          sprintf(Buffer, "0x%X", i);
-//          check = i;
-//          HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
-//      }
-//  }
-//  HAL_UART_Transmit(&huart2, EndMSG, sizeof(EndMSG), 10000);
-//  /*--[ Scanning Done ]--*/
-//    HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
+//  IMU_status = LSM9DS1_Init_AccelGyro(&hi2c1);
 
+//  ScanI2CBus(&hi2c1, &i2c_buffer, &devices_count);
 
+  IMU_status = LSM9DS1_Init_AccelGyro(&hi2c1);
+  if(IMU_status == 0  ){
+	  HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
+  }
 
+  HAL_Delay(2000);
 
-//  while(LSM9DS1_Init_AccelGyro(&hi2c1) != 0)
-//  HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
-//
-  check = LSM9DS1_Init_AccelGyro(&hi2c1);
-  if(check){
+  MAG_status = LSM9DS1_Init_Mag(&hi2c1);
+  if(IMU_status == 0  ){
 	  HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
   }
 
@@ -150,16 +136,19 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//	  if(IMU_flag){
-//		  LSM9DS1_Read_Accel(&hi2c1, &IMU);
-//		  LSM9DS1_Read_Gyro(&hi2c1, &IMU);
-////		  LSM9DS1_Read_Mag(&hi2c1, &IMU);
-//		  Normalize_Accel_Values(&IMU);
-//		  Normalize_Gyro_Values(&IMU);
-////		  Normalize_Mag_Values(&IMU);
-//		  IMU_flag = 0;
-//	  }
+	  if(IMU_flag){
+		  LSM9DS1_Read_Accel(&hi2c1, &IMU);
+		  LSM9DS1_Read_Gyro(&hi2c1, &IMU);
+		  LSM9DS1_Read_Mag(&hi2c1, &IMU);
+		  Normalize_Accel_Values(&IMU);
+		  Normalize_Gyro_Values(&IMU);
+		  Normalize_Mag_Values(&IMU);
+		  ftoaIMU(&IMU, IMU_i2cBuffer, sizeof(IMU_i2cBuffer), 4);
+		  HAL_UART_Transmit(&huart2, (uint8_t*)IMU_i2cBuffer, strlen(IMU_i2cBuffer), HAL_MAX_DELAY);
+		  IMU_flag = 0;
+	  }
 
+//	  SendI2CDevicesUART(&huart2, &i2c_buffer, devices_count);
   }
   /* USER CODE END 3 */
 }

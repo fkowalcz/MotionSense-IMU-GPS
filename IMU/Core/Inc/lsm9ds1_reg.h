@@ -1,8 +1,8 @@
 #ifndef INC_LSM9DS1_REG_H_
 #define INC_LSM9DS1_REG_H_
 
-#define LSM9DS1_AG_ADDR      0x6B
-#define LSM9DS1_MAG_ADDR     0x1E
+#define LSM9DS1_AG_ADDR      (0x6B << 1)
+#define LSM9DS1_MAG_ADDR     (0x1E << 1)
 
 // Reserved -- 0x00 - 0x03
 #define ACT_THS              0x04  // r/w
