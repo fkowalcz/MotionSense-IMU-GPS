@@ -35,28 +35,6 @@ uint8_t LSM9DS1_Init_AccelGyro(I2C_HandleTypeDef *I2Cx)
     return 1; // Zwracamy 1, jeśli WHO_AM_I nie odpowiada oczekiwanej wartości
 }
 
-
-//uint8_t LSM9DS1_Init_AccelGyro(I2C_HandleTypeDef *I2Cx)
-//{
-//    uint8_t check;
-//
-//    // Odczytujemy rejestr WHO_AM_I dla akcelerometru/żyroskopu
-//    if (HAL_I2C_Mem_Read(I2Cx, LSM9DS1_AG_ADDR, WHO_AM_I, 1, &check, 1, 100) != HAL_OK)
-//    {
-//        // Błąd komunikacji I2C
-//        return 2; // Zwracamy 2, jeśli komunikacja I2C się nie powiodła
-//    }
-//
-//    // Sprawdzamy, czy odczytana wartość WHO_AM_I jest poprawna
-//    if (check == 104){ // 0x68 jest wartością WHO_AM_I dla akcelerometru/żyroskopu
-//
-//        return 0; // Zwracamy 0, jeśli inicjalizacja zakończyła się sukcesem
-//    }
-//
-//    return 1; // Zwracamy 1, jeśli WHO_AM_I nie odpowiada oczekiwanej wartości
-//}
-
-
 uint8_t LSM9DS1_Init_Mag(I2C_HandleTypeDef *I2Cx)
 {
     uint8_t check;
@@ -140,16 +118,16 @@ void Normalize_Accel_Values(IMU_t *Raw_Values){
 
 void Normalize_Gyro_Values(IMU_t *Raw_Values){
     //Scale values
-	Raw_Values-> Gyro_X = Raw_Values-> Gyro_X_RAW/245.0; //Values for FS_SEL = 0
-	Raw_Values-> Gyro_Y = Raw_Values-> Gyro_Y_RAW/245.0;
-	Raw_Values-> Gyro_Z = Raw_Values-> Gyro_Z_RAW/245.0;
+	Raw_Values-> Gyro_X = Raw_Values-> Gyro_X_RAW*245.0/32768; //Values for FS_SEL = 0
+	Raw_Values-> Gyro_Y = Raw_Values-> Gyro_Y_RAW*245.0/32768;
+	Raw_Values-> Gyro_Z = Raw_Values-> Gyro_Z_RAW*245.0/32768;
 };
 
 void Normalize_Mag_Values(IMU_t *Raw_Values){
     //Scale values
-	Raw_Values-> Mag_X = Raw_Values-> Mag_X_RAW/4.0; //Values for FS_SEL = 0
-	Raw_Values-> Mag_Y = Raw_Values-> Mag_Y_RAW/4.0;
-	Raw_Values-> Mag_Z = Raw_Values-> Mag_Z_RAW/4.0;
+	Raw_Values-> Mag_X = Raw_Values-> Mag_X_RAW*4.0/32768; //Values for FS_SEL = 0
+	Raw_Values-> Mag_Y = Raw_Values-> Mag_Y_RAW*4.0/32768;
+	Raw_Values-> Mag_Z = Raw_Values-> Mag_Z_RAW*4.0/32768;
 };
 
 

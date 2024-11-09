@@ -1,5 +1,5 @@
-#ifndef INC_UTILS_HPP_
-#define INC_UTILS_HPP_
+#ifndef INC_USART_UTILS_H_
+#define INC_USART_UTILS_H_
 
 #include <string.h>
 
@@ -44,9 +44,9 @@ void ftoaIMU(IMU_t *IMU, char *buffer, int bufferSize, int decimalDigits) {
         wholePart[i] = (int)values[i];
         fractionalPart[i] = (int)(fabs(values[i] - wholePart[i]) * pow(10, decimalDigits));
 
-        if (values[i] < 0) {
-            wholePart[i] = -wholePart[i];
-        }
+//        if (values[i] < 0) {
+//            wholePart[i] = -wholePart[i];
+//        }
     }
 
     snprintf(buffer, bufferSize,
@@ -62,4 +62,4 @@ void ftoaIMU(IMU_t *IMU, char *buffer, int bufferSize, int decimalDigits) {
              wholePart[8], decimalDigits, fractionalPart[8]);
 }
 
-#endif /* INC_UTILS_HPP_ */
+#endif /* INC_USART_UTILS_H_ */

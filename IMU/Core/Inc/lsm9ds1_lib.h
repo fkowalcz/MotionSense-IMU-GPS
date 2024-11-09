@@ -30,10 +30,9 @@ typedef struct
     float Gyro_Y;
     float Gyro_Z;
 
-    float Gyro_Pitch;
-    float Gyro_Roll;
-
-
+    float filteredGyro_X;
+    float filteredGyro_Y;
+    float filteredGyro_Z;
 
 	int16_t Accel_X_RAW;
     int16_t Accel_Y_RAW;
@@ -43,8 +42,9 @@ typedef struct
     float Accel_Y;
     float Accel_Z;
 
-    float Accel_Pitch;
-    float Accel_Roll;
+    float filteredAccel_X;
+    float filteredAccel_Y;
+    float filteredAccel_Z;
 
 	int16_t Mag_X_RAW;
     int16_t Mag_Y_RAW;
@@ -53,6 +53,10 @@ typedef struct
     float Mag_X;
     float Mag_Y;
     float Mag_Z;
+
+    float filteredMag_X;
+    float filteredMag_Y;
+    float filteredMag_Z;
 
 } IMU_t;
 

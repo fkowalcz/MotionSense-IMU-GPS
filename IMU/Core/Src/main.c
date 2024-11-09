@@ -26,10 +26,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "lsm9ds1_lib.h"
-#include "utils.hpp"
-
-#include "stdio.h"
-#include "string.h"
+#include <stdio.h>
+#include <string.h>
+#include "accel.h"
+#include "usart_utils.h"
 
 /* USER CODE END Includes */
 
